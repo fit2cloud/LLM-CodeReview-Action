@@ -108,31 +108,36 @@ export const robot = (app: Probot) => {
         all_files = files
       }
 
-        const ignoreList = (process.env.IGNORE || process.env.ignore || '')
-            .split('\n')
-            .filter((v) => v !== '');
+      const ignoreList = (process.env.IGNORE || process.env.ignore || '')
+          .split('\n')
+          .filter((v) => v !== '');
 
-        const ignorePatterns = (process.env.IGNORE_PATTERNS || '').split(',')
+      const ignorePatterns = (process.env.IGNORE_PATTERNS || '').split(',')
 
-        const filePatterns = (process.env.FILE_PATTERNS || '').split(',')
+      const filePatterns = (process.env.FILE_PATTERNS || '').split(',')
 
-        const filesNames = all_files?.map((file) => file.filename) || [];
+      const filesNames = all_files?.map((file) => file.filename) || [];
 
-        if (process.env.FILE_PATTERNS) {
-            changedFiles = changedFiles?.filter(
-                (file) =>
-                    filter_patterns(file.filename, filePatterns)
-                    && !ignoreList.includes(file.filename) &&
-                    !filter_patterns(file.filename, ignorePatterns)
-            );
-        } else {
-            changedFiles = changedFiles?.filter(
-                (file) =>
-                    filesNames.includes(file.filename) &&
-                    !ignoreList.includes(file.filename) &&
-                    !filter_patterns(file.filename, ignorePatterns)
-            );
-        }
+      console.info('filesNames:', filesNames);
+      console.info('changed files:', changedFiles);
+
+      if (process.env.FILE_PATTERNS) {
+          changedFiles = changedFiles?.filter(
+              (file) =>
+                  filter_patterns(file.filename, filePatterns)
+                  && !ignoreList.includes(file.filename) &&
+                  !filter_patterns(file.filename, ignorePatterns)
+          );
+      } else {
+          changedFiles = changedFiles?.filter(
+              (file) =>
+                  filesNames.includes(file.filename) &&
+                  !ignoreList.includes(file.filename) &&
+                  !filter_patterns(file.filename, ignorePatterns)
+          );
+      }
+
+      console.info('filter changed files:', changedFiles);
 
       if (!changedFiles?.length) {
         console.log('no change found');
