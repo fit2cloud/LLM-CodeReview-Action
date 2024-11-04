@@ -7,7 +7,7 @@ const MAX_PATCH_COUNT = process.env.MAX_PATCH_LENGTH
   ? +process.env.MAX_PATCH_LENGTH
   : Infinity;
 
-function filter_patterns(filePath: string, patterns: string[]) {
+const filter_patterns = (filePath: string, patterns: string[])=> {
     return patterns.some(pattern => {
         if (pattern.startsWith('*')) {
             // 处理通配符模式 (如 *.txt)
@@ -116,12 +116,7 @@ export const robot = (app: Probot) => {
 
         const filePatterns = (process.env.FILE_PATTERNS || '').split(',')
 
-        console.info("FILE_PATTERNS", process.env.FILE_PATTERNS)
-        console.info("filePatterns", filePatterns)
-
         const filesNames = all_files?.map((file) => file.filename) || [];
-
-        console.info(filesNames)
 
         if (process.env.FILE_PATTERNS) {
             changedFiles = changedFiles?.filter(
@@ -138,7 +133,6 @@ export const robot = (app: Probot) => {
                     !filter_patterns(file.filename, ignorePatterns)
             );
         }
-        console.info(changedFiles)
 
       if (!changedFiles?.length) {
         console.log('no change found');
