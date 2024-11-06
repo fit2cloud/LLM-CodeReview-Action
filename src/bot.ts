@@ -166,11 +166,11 @@ export const robot = (app: Probot) => {
           continue;
         }
         // 限制最大review次数
-        count++
         if (count > maxReviewCount) {
             console.info('count > MAX_REVIEW_COUNT:', count, maxReviewCount);
             break;
         }
+        count++
 
         try {
           const res = await chat?.codeReview(patch);
