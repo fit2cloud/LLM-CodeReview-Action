@@ -36,4 +36,4 @@ jobs:
 ### 基于https://github.com/anc95/ChatGPT-CodeReview
 
 1.做了部分精简 <br>
-2.增加参数FILE_PATTERNS
+2.增加参数MAX_REVIEW_COUNT和FILE_PATTERNS
