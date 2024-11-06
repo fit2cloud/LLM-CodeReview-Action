@@ -118,7 +118,6 @@ export const robot = (app: Probot) => {
 
       const filesNames = all_files?.map((file) => file.filename) || [];
 
-      console.info('filesNames:', filesNames);
       console.info('changed files:', changedFiles);
 
       if (process.env.FILE_PATTERNS) {
@@ -139,6 +138,10 @@ export const robot = (app: Probot) => {
 
       console.info('filter changed files:', changedFiles);
 
+      // 按changes降序排序
+      changedFiles = changedFiles?.sort((a, b) => b.changes - a.changes);
+      console.info('sort changed files:', changedFiles);
+
       if (!changedFiles?.length) {
         console.log('no change found');
         return 'no change';
@@ -146,6 +149,8 @@ export const robot = (app: Probot) => {
 
       console.time('gpt cost');
 
+      let count = 1
+      const maxReviewCount = process.env.MAX_REVIEW_COUNT || 3
       for (let i = 0; i < changedFiles.length; i++) {
         const file = changedFiles[i];
         const patch = file.patch || '';
@@ -160,6 +165,13 @@ export const robot = (app: Probot) => {
           );
           continue;
         }
+        // 限制最大review次数
+        count++
+        if (count > maxReviewCount) {
+            console.info('count > MAX_REVIEW_COUNT:', count, maxReviewCount);
+            break;
+        }
+
         try {
           const res = await chat?.codeReview(patch);
 
