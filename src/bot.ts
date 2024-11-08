@@ -11,7 +11,7 @@ const filter_patterns = (filePath: string, patterns: string[])=> {
     return patterns.some(pattern => {
         if (pattern.startsWith('*')) {
             // 处理通配符模式 (如 *.txt)
-            const regex = new RegExp(pattern.replace(/\*/g, '.*'));
+            const regex = new RegExp('^' + pattern.replace(/\*/g, '.*') + '$');
             return regex.test(filePath);
         } else {
             // 处理路径匹配 (如 /node_modules)
