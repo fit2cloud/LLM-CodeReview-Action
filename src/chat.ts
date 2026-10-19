@@ -40,7 +40,7 @@ export class Chat {
     console.time('code-review cost');
     const prompt = this.generatePrompt(patch);
 
-    const res = await this.chatAPI.sendMessage(prompt);
+    const res = await this.chatAPI.sendMessage(prompt, { timeoutMs: 600_000 });
 
     console.timeEnd('code-review cost');
     return res.text;
